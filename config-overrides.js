@@ -16,10 +16,9 @@ module.exports = override(
     addDecoratorsLegacy(),
     //配置路径别名：简化路径(问题：路径没有提示)
     addWebpackAlias({
-       '@comps':resolve(__dirname,'src/components'),
-       '@conts':resolve(__dirname,'src/containers'),
-       '@config':resolve(__dirname,'src/config'),
-       '@redux':resolve(__dirname,'src/redux'),
-
+        '@comps': resolve(__dirname, 'src/components'),
+        '@conts': resolve(__dirname, 'src/containers'),
+        '@config': resolve(__dirname, 'src/config'),
+        '@redux': resolve(__dirname, 'src/redux'),
     })
 );

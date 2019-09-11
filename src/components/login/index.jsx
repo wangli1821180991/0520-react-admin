@@ -1,7 +1,19 @@
 import React, {Component} from 'react'
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button ,message} from 'antd';
+// import axios from 'axios';
+// import instance from '../../api'
+import {reqLogin} from '../../api'
+
+import {connect} from 'react-redux';
+import {saveUser} from '@redux/action-creators';
+// import {saveUserser} from "../../redux/action-creators";
+
 import logo from './logo.png'
 import './index.less'
+@connect(
+    null,
+    {saveUser}
+)
 
 @Form.create()
 class Login extends Component {
@@ -14,7 +26,7 @@ class Login extends Component {
     * */
     validator = (rule, value, callback) => {
         // console.log(rule, value);
-        const name=rule.field==='username'? '用户名':'密码'
+        const name=rule.field==='username'? '用户名':'密码';
         if (!value){
             return callback(`请输入${name}`);
         }
@@ -31,6 +43,78 @@ class Login extends Component {
         //callback必须调用
         callback();
     };
+/**
+ * 登录的函数
+ * */
+    login=(e)=> {
+        //禁止默认行为
+        e.preventDefault();
+        //校验表单
+        this.props.form.validateFields((error,values)=> {
+            /**
+             * error 校验失败错误
+             * 校验失败就是{}
+             * 校验通过就是null
+             * values所有表单项的值
+             */
+        if (!error){
+            //校验通过
+            // console.log(values);
+            //获取表单项的值
+            const {username,password} =values;
+            //发送请求，请求登录
+
+            // axios.post('/login',{username,password})
+            //     .then(({data})=> {
+            //         //请求成功
+            //         //判断status的值，来决定是否登录成功
+            //         if (data.status===0){
+            //             //登录成功
+            //             message.success('恭喜你登录成功');
+            //             //保存用户数据 redux localStorage/sessionStorage
+            //             this.props.saveUser(data.data);
+            //
+            //             //跳转/路由
+            //             // return <Redirect to="/"/>
+            //             this.props.history.replace('/')
+            //         }else {
+            //             //登录失败
+            //             message.error(data.msg);
+            //             //清空密码
+            //             // this.props.form.resetFields(['password']);
+            //         }
+            //     })
+            //     .catch((error)=> {
+            //         //请求失败----登录失败
+            //         message.error('未知的错误 请联系管理员····')
+            //         //清空密码
+            //         // this.props.form.resetFields(['password']);
+            //     })
+            //     .finally(()=> {
+            //        //不管成功/还是都会失败
+            //        //清空密码
+            //         this.props.form.resetFields(['password']);
+            //
+            //     })
+
+           reqLogin(username,password)
+                .then((result)=> {
+                    //登录成功
+                    message.success('登录成功');
+                    //保存用户数据
+                    this.props.saveUser(result);
+                    //跳转数据 / 路由
+                    this.props.history.replace('/');
+                })
+                .catch(()=> {
+                    //不管成功/还是失败都会触发
+                    //清空密码
+                    this.props.form.resetFields(['password'])
+                })
+        }
+        })
+
+    };
 
     render() {
         //getFieldDecorator 专门表单效验的方法
@@ -43,7 +127,7 @@ class Login extends Component {
                 </header>
                 <section className="login-section">
                     <h3>用户登录</h3>
-                    <Form>
+                    <Form onSubmit={this.login}>
                         <Form.Item>{
                             getFieldDecorator(
                                 'username',
