@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import { Form, Icon, Input, Button ,message} from 'antd';
 // import axios from 'axios';
 // import instance from '../../api'
-import {reqLogin} from '../../api'
+import {reqLogin} from '../../api';
+import withCheckLogin from '@conts/with-check-login';
+
 
 import {connect} from 'react-redux';
 import {saveUser} from '@redux/action-creators';
@@ -10,6 +12,7 @@ import {saveUser} from '@redux/action-creators';
 
 import logo from './logo.png'
 import './index.less'
+@withCheckLogin
 @connect(
     null,
     {saveUser}
@@ -175,5 +178,4 @@ class Login extends Component {
 
 //Form.create是一个高阶组件
 //目的：给login组件传递form属性
-const newLogin = Form.create()(Login);
-export default newLogin
+export default Login
