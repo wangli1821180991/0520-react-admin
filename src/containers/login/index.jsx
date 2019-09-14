@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import {saveUser} from '@redux/action-creators';
 // import {saveUserser} from "../../redux/action-creators";
 
-import logo from './logo.png'
+import logo from '@assets/images/logo.png';
 import './index.less'
 @withCheckLogin
 @connect(
