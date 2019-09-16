@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
-import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
+import React, {Component, Suspense} from 'react';
+import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
+import {Spin} from 'antd'
 
 import Login from '@conts/login';
 import NotMatch from  '@comps/not-match';
@@ -11,7 +12,8 @@ import routes from "./config/routes";
 
 class App extends Component {
     render() {
-        return <Router>
+        return <Suspense fallback={<Spin size="large"/>}>
+        <Router>
          <Switch>
              <Route path='/login' component={Login} exact/>
              <BasicLayout>
@@ -26,7 +28,8 @@ class App extends Component {
              </BasicLayout>
          </Switch>
 
-        </Router>;
+        </Router>
+        </Suspense>;
 
     }
 
