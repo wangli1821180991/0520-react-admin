@@ -29,9 +29,9 @@ class App extends Component {
          </Switch>
 
         </Router>
-        </Suspense>;
+        </Suspense>
 
     }
 
 }
-export default App;
+export default App
