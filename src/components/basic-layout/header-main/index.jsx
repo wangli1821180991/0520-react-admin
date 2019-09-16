@@ -4,17 +4,23 @@ import screenfull from 'screenfull';
 import {withTranslation,getI18n} from 'react-i18next';
 import {connect} from 'react-redux';
 import {removeUser} from '@redux/action-creators';
+import {formatDate} from '@utils/tools';
 import './index.less';
 
 @connect(
-    (state)=> ({username:state.user.user.username}),
+    (state)=> ({
+        username:state.user.user.username,
+        title:state.title
+
+    }),
     {removeUser}
 )
 @withTranslation()
 class HeaderMain extends Component {
     state={
         isScreenFull:false,
-        isEnglish:getI18n().language==='en'
+        isEnglish:getI18n().language==='en',
+        time:formatDate()
     };
     screenFull=()=> {
         if (screenfull.isEnabled){
@@ -38,6 +44,12 @@ class HeaderMain extends Component {
     componentDidMount() {
         //绑定事件
         screenfull.on('change',this.change);
+        //设置定时器
+        setInterval(()=> {
+            this.setState({
+                time:formatDate()
+            })
+        },1000)
     }
     componentWillUnmount() {
         //解绑事件
@@ -60,8 +72,8 @@ class HeaderMain extends Component {
 
     };
     render() {
-        const {isScreenFull,isEnglish}=this.state;
-        const {username}=this.props;
+        const {isScreenFull,isEnglish,time}=this.state;
+        const {username,title,t}=this.props;
         return (
 
             <div className="header-main">
@@ -72,8 +84,8 @@ class HeaderMain extends Component {
                     <Button type="link" onClick={this.logout}>退出</Button>
                 </div>
                 <div className="header-main-bottom">
-                    <h3>首页</h3>
-                    <span>2019-09-16 15:31:16</span>
+                    <h3>{t(title)}</h3>
+                    <span>{time}</span>
                 </div>
             </div>
         )
