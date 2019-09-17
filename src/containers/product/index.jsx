@@ -61,6 +61,7 @@ const {Option}=Select;
                      pageSizeOptions:['3', '6', '9', '12'],
                      defaultPageSize:3
                  }}
+                 rowKey="_id"
              />
          </Card>
      }
