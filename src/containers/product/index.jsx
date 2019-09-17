@@ -53,9 +53,9 @@ const {Option}=Select;
      componentDidMount() {
          this.getProducts(1,3);
      }
-     // change=(pageNum ,pageSize)=> {
-     //   this.getProducts(pageNum ,pageSize);
-     // };
+     goSaveUpdate=()=> {
+       this.props.history.push('/product/saveupdate');
+     };
 
      render() {
          const {products,total}=this.state;
@@ -68,7 +68,7 @@ const {Option}=Select;
              <Input placeholder="关键字" className="product-input"/>
              <Button type="primary">搜索</Button>
          </div>}
-         extra={<Button type="primary"><Icon type="plus"/> 添加商品</Button>}
+         extra={<Button type="primary" onClick={this.goSaveUpdate}><Icon type="plus"/> 添加商品</Button>}
          >
              <Table
                  columns={this.columns}

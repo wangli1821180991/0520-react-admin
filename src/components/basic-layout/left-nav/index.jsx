@@ -69,7 +69,7 @@ const { SubMenu } = Menu;
                 for (var j = 0; j < menu.children.length; j++) {
 
                     const cMenu=menu.children[j];
-                    if (cMenu.key===pathname){
+                    if (pathname.startsWith(cMenu.key)){
                         return menu.key
                     }
                 }
@@ -85,7 +85,7 @@ const { SubMenu } = Menu;
                 for (let j = 0; j < menu.children.length; j++) {
 
                     const cMenu=menu.children[j];
-                    if (cMenu.key===pathname){
+                    if (pathname.startsWith(cMenu.key)){
                         return cMenu.title;
                     }
                 }
@@ -110,7 +110,8 @@ const { SubMenu } = Menu;
     }
 
     render() {
-        const {pathname}=this.props.location;
+        let {pathname}=this.props.location;
+        pathname=pathname.startsWith('./product') ? '/product':pathname;
         // const {t}=this.props;
         const menus=this.createMenu();
         const openKeys=this.findOpenKeys(pathname);
