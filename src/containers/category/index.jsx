@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
-import { Card,Button,Icon ,Table} from 'antd';
+import { Card,Button,Icon ,Table,Modal} from 'antd';
 import {connect} from 'react-redux';
-import {getCategories} from '@redux/action-creators';
+import {getCategories,addCategory} from '@redux/action-creators';
+import AddCategoryForm from './add-category-form';
 import './index.less';
 @connect(
     (state)=> ({categories:state.categories}),
-    {getCategories}
+    {getCategories,addCategory}
     )
  class Category extends Component {
+    state={
+        isShowAddCategoryModal:false,
+    };
+
+    addCategoryForm=React.createRef();
     columns = [
         {
             title: '品类名称',//表头的名字
@@ -31,7 +37,32 @@ import './index.less';
         //发送请求，请求分类数据，更新redux状态
         this.props.getCategories();
     }
+    switchModal=(value)=> {
+    return ()=> {
+        this.setState({
+            isShowAddCategoryModal:value
+        })
+     }
+    };
+    addCategory=()=> {
+        const form=this.addCategoryForm.current;
+        //检验表单
 
+        form.validateFields((err,values)=> {
+      if (!err){
+          //表单效验通过
+          this.props.addCategory(values.categoryName);
+          // 清空表单
+          form.resetFields();
+
+          //隐藏对话框
+            this.setState({
+                isShowAddCategoryModal:false
+            })
+
+      }
+       })
+    };
     render() {
         //列的表头
         // const columns = [
@@ -76,7 +107,8 @@ import './index.less';
 //             },
 //         ];
         const {categories}=this.props;
-        return  <Card title="分类列表" extra={<Button type="primary"> <Icon type="plus"/>分类列表</Button>}>
+        const {isShowAddCategoryModal}=this.state;
+        return  <Card title="分类列表" extra={<Button type="primary" onClick={this.switchModal(true)}> <Icon type="plus"/>分类列表</Button>}>
                 <Table
                     columns={this.columns}
                     dataSource={categories}
@@ -90,6 +122,17 @@ import './index.less';
                         defaultPageSize:3
                         }}
                 />
+            <Modal
+                visible={isShowAddCategoryModal}
+                title="添加分类"
+                onOk={this.addCategory}
+                okText="确定"
+                cancelText="取消"
+                width={300}
+                onCancel={this.switchModal(false)}
+            >
+                <AddCategoryForm ref={this.addCategoryForm}/>
+            </Modal>
             </Card>;
 
     }

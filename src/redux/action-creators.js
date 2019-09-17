@@ -4,9 +4,10 @@ import {
     SAVE_USER,
     REMOVE_USER,
     SET_TITLE,
-    GET_CATEGORIES_SUCCESS
+    GET_CATEGORIES_SUCCESS,
+    ADD_CATEGORY_SUCCESS
 } from './action-types';
-import { reqGetCategories } from '@api';
+import { reqGetCategories,reqAddCategory } from '@api';
 
 // 保存用户数据
 export const saveUser = (user) => ({type: SAVE_USER, data: user});
@@ -26,4 +27,15 @@ export const getCategories = () => {
         // 更新redux状态
         dispatch(getCategoriesSuccess(result));
     }
+};
+
+const addCategorySuccess = (category) => ({type: ADD_CATEGORY_SUCCESS, data: category});
+
+
+//添加分类数据
+export const addCategory=(categoryName)=> {
+ return async (dispatch)=> {
+     const result=await reqAddCategory(categoryName);
+     dispatch(addCategorySuccess(result))
+ }
 };

@@ -1,6 +1,6 @@
 
 import Home from '@comps/home';
-import Category from '@comps/category';
+import Category from '@conts/category';
 
 const routes=[
     {
