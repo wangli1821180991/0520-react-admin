@@ -74,6 +74,7 @@ class HeaderMain extends Component {
     render() {
         const {isScreenFull,isEnglish,time}=this.state;
         const {username,title,t}=this.props;
+        console.log(title);
         return (
 
             <div className="header-main">
