@@ -18,7 +18,8 @@ instance.interceptors.request.use(
         //config就是发送请求的配置信息（请求方法，请求头，请求参数。。。。）
         // config.headers.authorization=store.getState().user.token;
         if (token){
-            config.headers.authorization=token;
+            config.headers.authorization = `Bearer ${token}`;
+            // config.headers.authorization = token;
         }
         return config;
     },
@@ -50,5 +51,6 @@ instance.interceptors.response.use(
         return Promise.reject('未知错误，请联系管理员····')
     }
 );
+
 
 export default instance;

@@ -1,7 +1,7 @@
 /*根据preState和action来生成newState*/
 
 import {combineReducers } from 'redux';
-import {SAVE_USER,REMOVE_USER,SET_TITLE} from './action-types';
+import {SAVE_USER,REMOVE_USER,SET_TITLE,GET_CATEGORIES_SUCCESS} from './action-types';
 import {setItem,getItem,removeItem} from '../utils/storage';
 //初始化数据
 const initUser = {
@@ -36,7 +36,17 @@ function title(preState='',action) {
     }
 
 }
+
+function categories(preState=[],action) {
+  switch (action.type) {
+      case  GET_CATEGORIES_SUCCESS:
+          return action.data;
+      default:
+          return preState;
+}
+}
 export default combineReducers({
     user,
-    title
+    title,
+    categories
 })
