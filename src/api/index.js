@@ -10,3 +10,4 @@ export const reqGetCategories=()=> axios.get('/category/get');
 //请求添加分类数据
 export const reqAddCategory=(categoryName)=> axios.post('/category/add',{categoryName});
 export const reqUpdateCategory=(categoryId,categoryName)=> axios.post('/category/update',{categoryId,categoryName});
+export const reqGetProducts=(pageNum,pageSize)=> axios.get('/product/list',{params:{pageNum,pageSize}});

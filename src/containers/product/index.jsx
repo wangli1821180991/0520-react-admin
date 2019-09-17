@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
 import {Card,Select,Input,Button,Icon,Table} from 'antd';
+import  {reqGetProducts} from '@api';
 import './index.less';
 const {Option}=Select;
 
  class Product extends Component {
+     state={
+         total:0,
+        products:[]
+     };
      columns=[
         {
             title:'商品名称',
@@ -22,8 +27,8 @@ const {Option}=Select;
              dataIndex:'status',
              render:()=> {
                  return <div>
-                     <Button>下架</Button>
-                     <Button>已上架</Button>
+                     <Button type="primary">下架</Button>
+                     <span>已上架</span>
                  </div>
              }
          },
@@ -38,7 +43,22 @@ const {Option}=Select;
          }
 
      ];
+     getProducts= async (pageNum,pageSize)=> {
+      const result= await reqGetProducts(pageNum,pageSize);
+      this.setState({
+          total:result.total,
+          products:result.list
+      })
+     };
+     componentDidMount() {
+         this.getProducts(1,3);
+     }
+     // change=(pageNum ,pageSize)=> {
+     //   this.getProducts(pageNum ,pageSize);
+     // };
+
      render() {
+         const {products,total}=this.state;
          return <Card
          title={<div>
              <Select defaultValue={"1"}>
@@ -52,14 +72,17 @@ const {Option}=Select;
          >
              <Table
                  columns={this.columns}
-                 dataSource={[]}
+                 dataSource={products}
                  bordered
                  pagination={{
 
                      showQuickJumper:true,
                      showSizeChanger:true,
                      pageSizeOptions:['3', '6', '9', '12'],
-                     defaultPageSize:3
+                     defaultPageSize:3,
+                     total,
+                     onChange:this.getProducts,
+                     onShowSizeChange:this.getProducts
                  }}
                  rowKey="_id"
              />
