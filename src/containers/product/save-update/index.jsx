@@ -1,16 +1,48 @@
 import React, {Component} from 'react';
 import {Card,Icon,Input,Form,Select,InputNumber,Button} from 'antd';
+
+import {convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import {connect} from 'react-redux';
+import {getCategories} from '@redux/action-creators';
+
+
 import RichTextEditor from '../rich-text-editor';
 const {Item}=Form;
 const {Option}=Select;
-
+@connect(
+    (state)=> ({categories:state.categories }),
+    {getCategories}
+)
 @Form.create()
  class SaveUpdate extends Component {
+    richTextEditor=React.createRef();
+
+    submit=(e)=> {
+        e.preventDefault();
+    this.props.form.validateFields((err,values)=> {
+        if (!err){
+            const {editorState}=this.richTextEditor.current.state;
+          const detail= draftToHtml(convertToRaw(editorState.getCurrentContent()))
+            console.log(detail);
+          const {name,desc,price,categoryId}=values;
+            console.log(name, desc, price, categoryId);
+            //发送请求
+
+
+        }
+    })
+    };
+    componentDidMount() {
+        if (this.props.categories.length) return;
+        this.props.getCategories();
+    }
+
     render() {
         const {getFieldDecorator}=this.props.form;
         return (
             <Card title={<div><Icon type="arrow-left"/><span>添加商品</span></div>}>
-                <Form labelCol={{span:2}} wrapperCol={{span:8}}>
+                <Form labelCol={{span:2}} wrapperCol={{span:8}} onSubmit={this.submit}>
                     <Item label="商品名称">
                         {
                             getFieldDecorator(
@@ -51,8 +83,12 @@ const {Option}=Select;
                                     ]
                                 }
                             )(
-                                <Select placeholder="请输入商品分类">
-                                    <Option key={1} value={1}>qqq</Option>
+                                 <Select placeholder="请输入商品分类">
+                                    {
+                                        this.props.categories.map((category)=> {
+                                         return <Option key={category._id} value={category._id}>{category.name}</Option>
+                                        })
+                                    }
                                 </Select>
                             )
                         }
@@ -81,7 +117,7 @@ const {Option}=Select;
                         <Button type="primary" htmlType="submit">提交</Button>
                     </Item>
                     <Item label="商品详情" wrapperCol={{span:20}}>
-                        <RichTextEditor/>
+                        <RichTextEditor ref={this.richTextEditor}/>
                     </Item>
 
                 </Form>

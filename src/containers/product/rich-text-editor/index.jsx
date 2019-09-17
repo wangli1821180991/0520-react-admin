@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { EditorState} from 'draft-js';
+// import { EditorState, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-
+import PropTypes from 'prop-types';
+// import htmlToDraft from 'html-to-draftjs';
 
 import './index.less';
 
@@ -10,7 +11,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 class RichTextEditor extends Component {
     state = {
-        editorState: EditorState.createEmpty(),
+        detail: PropTypes.string.isRequired,
     };
 
     onEditorStateChange =(editorState) => {

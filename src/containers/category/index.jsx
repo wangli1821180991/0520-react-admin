@@ -49,6 +49,7 @@ import './index.less';
 
     };
     componentDidMount() {
+        if (this.props.categories.length) return;
         //发送请求，请求分类数据，更新redux状态
         this.props.getCategories();
     }
