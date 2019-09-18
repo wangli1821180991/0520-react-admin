@@ -6,6 +6,8 @@ import draftToHtml from 'draftjs-to-html';
 import {connect} from 'react-redux';
 import {getCategories} from '@redux/action-creators';
 
+import {reqAddProduct,reqUpdateProduct} from '@api';
+
 
 import RichTextEditor from '../rich-text-editor';
 const {Item}=Form;
@@ -20,15 +22,23 @@ const {Option}=Select;
 
     submit=(e)=> {
         e.preventDefault();
-    this.props.form.validateFields((err,values)=> {
+    this.props.form.validateFields(async (err,values)=> {
         if (!err){
             const {editorState}=this.richTextEditor.current.state;
-          const detail= draftToHtml(convertToRaw(editorState.getCurrentContent()))
+          const detail= draftToHtml(convertToRaw(editorState.getCurrentContent()));
             console.log(detail);
           const {name,desc,price,categoryId}=values;
             console.log(name, desc, price, categoryId);
             //发送请求
-
+            const product = this.props.location.state;
+            if (product) {
+                const productId = product._id;
+                await reqUpdateProduct({name, desc, price, categoryId, detail, productId});
+            } else {
+                await reqAddProduct({name, desc, price, categoryId, detail});
+            }
+            //跳转到/product
+            this.props.history.push('/product');
 
         }
     })
@@ -37,11 +47,15 @@ const {Option}=Select;
         if (this.props.categories.length) return;
         this.props.getCategories();
     }
+    goBack=()=> {
+    this.props.history.goBack();
+    };
 
     render() {
         const {getFieldDecorator}=this.props.form;
+        const product=this.props.location.state;
         return (
-            <Card title={<div><Icon type="arrow-left"/><span>添加商品</span></div>}>
+            <Card title={<div><Icon type="arrow-left" onClick={this.goBack}/><span>{product ? '更新' : '添加'}商品</span></div>}>
                 <Form labelCol={{span:2}} wrapperCol={{span:8}} onSubmit={this.submit}>
                     <Item label="商品名称">
                         {
@@ -50,7 +64,8 @@ const {Option}=Select;
                                 {
                                     rules:[
                                         {required:true,message:'请输入商品名称'}
-                                    ]
+                                    ],
+                                    initialValue:product ? product.name:''
                                 }
                             )(
                                 <Input placeholder="请输入商品名称"/>
@@ -65,7 +80,8 @@ const {Option}=Select;
                                 {
                                     rules:[
                                         {required:true,message:'请输入商品描述'}
-                                    ]
+                                    ],
+                                    initialValue:product ? product.desc:''
                                 }
                             )(
                                 <Input placeholder="请输入商品描述"/>
@@ -80,7 +96,8 @@ const {Option}=Select;
                                 {
                                     rules:[
                                         {required:true,message:'请输入商品分类'}
-                                    ]
+                                    ],
+                                    initialValue:product ? product.categoryId:''
                                 }
                             )(
                                  <Select placeholder="请输入商品分类">
@@ -101,7 +118,8 @@ const {Option}=Select;
                                 {
                                     rules:[
                                         {required:true,message:'请输入商品价格'}
-                                    ]
+                                    ],
+                                    initialValue:product ? product.price:''
                                 }
                             )(
                                 <InputNumber
@@ -113,11 +131,12 @@ const {Option}=Select;
                         }
 
                     </Item>
+
+                    <Item label="商品详情" wrapperCol={{span:20}}>
+                        <RichTextEditor ref={this.richTextEditor} detail={product ? product.detail:''}/>
+                    </Item>
                     <Item>
                         <Button type="primary" htmlType="submit">提交</Button>
-                    </Item>
-                    <Item label="商品详情" wrapperCol={{span:20}}>
-                        <RichTextEditor ref={this.richTextEditor}/>
                     </Item>
 
                 </Form>

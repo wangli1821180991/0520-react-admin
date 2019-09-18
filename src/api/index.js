@@ -10,4 +10,15 @@ export const reqGetCategories=()=> axios.get('/category/get');
 //请求添加分类数据
 export const reqAddCategory=(categoryName)=> axios.post('/category/add',{categoryName});
 export const reqUpdateCategory=(categoryId,categoryName)=> axios.post('/category/update',{categoryId,categoryName});
+//获取数据
 export const reqGetProducts=(pageNum,pageSize)=> axios.get('/product/list',{params:{pageNum,pageSize}});
+//请求数据
+// export const reqAddProduct=({name,desc,price,categoryId,detail})=> axios.post('/product/add',{params:{name,desc,price,categoryId,detail}});
+export const reqAddProduct = ({name, desc, price, categoryId, detail}) => axios.post('/product/add', { name, desc, price, categoryId, detail });
+
+
+export const reqUpdateProduct = ({name, desc, price, categoryId, detail, productId}) => axios.post('/product/update', { name, desc, price, categoryId, detail, productId });
+
+export const reqSearchProducts = ({searchKey, searchValue, pageNum, pageSize}) => axios.get('/product/search', {params: { [searchKey]: searchValue , pageNum, pageSize }})
+
+
