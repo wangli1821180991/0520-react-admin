@@ -4,10 +4,10 @@ import dayjs from "dayjs";
 import {connect} from 'react-redux';
 import {getRoles} from '@redux/action-creators';
 
-import {reqGetUsers} from '@api';
-
+import {reqGetUsers,reqAddUser} from '@api';
 import AddUserForm from './add-user-form';
 import UpdateUserForm from './update-user-form';
+
 
 @connect(
     (state)=> ({roles:state.roles}),
@@ -71,7 +71,23 @@ class User extends Component {
    }
 
   // 创建用户的回调函数
-  addUser = () => {};
+  addUser = async () => {
+    //收集表单数据
+    const form=this.addUserFormRef.current.props.form;
+  const values=form.getFieldsValue();
+  //发送请求
+  const result=await reqAddUser(values);
+  //  更新状态
+    //隐藏对话框
+    this.setState({
+      users:[...this.state.users,result],
+      isShowAddUserModal:false
+    })
+
+    //重置表单
+    form.resetFields();
+
+  };
 
   // 更新用户的回调函数
   updateUser = () => {
@@ -88,7 +104,7 @@ class User extends Component {
   
   render () {
     const { users, isShowAddUserModal, isShowUpdateUserModal } = this.state;
-    
+    const {roles}=this.props;
     return (
       <Card
         title={
@@ -116,7 +132,7 @@ class User extends Component {
           okText='确认'
           cancelText='取消'
         >
-          <AddUserForm ref={this.addUserFormRef}/>
+          <AddUserForm wrappedComponentRef={this.addUserFormRef} roles={roles}/>
         </Modal>
   
         <Modal

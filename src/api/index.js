@@ -28,4 +28,6 @@ export const reqUpdateRole=(roleId,authName,menus)=> axios.post('/role/update',{
 
 export const reqGetUsers=()=> axios.get('/user/get');
 
+export const reqAddUser = ({ username, password, phone, email, roleId }) => axios.post('/user/add', { username, password, phone, email, roleId });
+
 
