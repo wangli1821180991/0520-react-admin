@@ -16,9 +16,16 @@ export const reqGetProducts=(pageNum,pageSize)=> axios.get('/product/list',{para
 // export const reqAddProduct=({name,desc,price,categoryId,detail})=> axios.post('/product/add',{params:{name,desc,price,categoryId,detail}});
 export const reqAddProduct = ({name, desc, price, categoryId, detail}) => axios.post('/product/add', { name, desc, price, categoryId, detail });
 
-
 export const reqUpdateProduct = ({name, desc, price, categoryId, detail, productId}) => axios.post('/product/update', { name, desc, price, categoryId, detail, productId });
 
-export const reqSearchProducts = ({searchKey, searchValue, pageNum, pageSize}) => axios.get('/product/search', {params: { [searchKey]: searchValue , pageNum, pageSize }})
+export const reqSearchProducts = ({searchKey, searchValue, pageNum, pageSize}) => axios.get('/product/search', {params: { [searchKey]: searchValue , pageNum, pageSize }});
+
+export const reqGetRoles=()=> axios.get('role/get');
+
+export const reqAddRole=(name)=> axios.post ('/role/add',{name});
+
+export const reqUpdateRole=(roleId,authName,menus)=> axios.post('/role/update',{roleId,authName,menus});
+
+export const reqGetUsers=()=> axios.get('/user/get');
 
 
